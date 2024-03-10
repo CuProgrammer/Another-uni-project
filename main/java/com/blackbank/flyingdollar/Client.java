@@ -15,4 +15,9 @@ public class Client {
         this.name = name;
         this.gender = gender;
     }
+
+    public String toString()
+    {
+        return BankUtils.combine(username, password, name, gender);
+    }
 }
