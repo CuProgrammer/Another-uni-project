@@ -12,7 +12,7 @@ public class Client {
     public Client(String username, String password, String name, Gender gender)
     {
         this.username = username;
-        this.password = password;
+        this.password = BankUtils.hashString(password);
         this.name = name;
         this.gender = gender;
     }
@@ -39,5 +39,10 @@ public class Client {
         int hash = 3;
         hash = 97 * hash + Objects.hashCode(this.username);
         return hash;
+    }
+    
+    public boolean confirmPassword(String password)
+    {
+        return this.password.equals(BankUtils.hashString(password));
     }
 }
