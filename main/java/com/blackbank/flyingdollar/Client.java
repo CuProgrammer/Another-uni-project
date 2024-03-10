@@ -16,6 +16,7 @@ public class Client {
         this.gender = gender;
     }
 
+    @Override
     public String toString()
     {
         return BankUtils.combine(username, password, name, gender);
