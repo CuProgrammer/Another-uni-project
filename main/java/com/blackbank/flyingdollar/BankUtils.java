@@ -1,7 +1,7 @@
 package com.blackbank.flyingdollar;
 
-public  class BankUtils {
-    public String combine(Object... objs)
+public class BankUtils {
+    public static String combine(Object... objs)
     {
         String combination = "";
         for (int i = 0; i < objs.length; i++)
