@@ -45,6 +45,8 @@ public class DataReader {
                     info.put(field[0], field[1]);
                     type = 0;
                     break;
+                default:
+                    System.err.println("Corrupted object with character " + c);
             }
         }
 
