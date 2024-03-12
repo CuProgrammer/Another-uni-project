@@ -1,7 +1,9 @@
 package com.blackbank.flyingdollar;
 
+import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 public class BankUtils {
     public static String combine(Object... objs)
@@ -29,5 +31,105 @@ public class BankUtils {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public static void parseMap(Object obj, HashMap<String, String> info)
+    {
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field:fields) {
+            field.setAccessible(true);
+            try {
+                if (field.getType().equals(int.class)) {
+                    field.set(obj, Integer.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(long.class)) {
+                    field.set(obj, Long.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(double.class)) {
+                    field.set(obj, Double.valueOf(info.get(field.getName()))); 
+                } else if (field.getType().equals(short.class)) {
+                    field.set(obj, Short.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(float.class)) {
+                    field.set(obj, Float.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(byte.class)) {
+                    field.set(obj, Byte.valueOf(info.get(field.getName()))); 
+                } else if (field.getType().equals(char.class)) {
+                    field.set(obj, info.get(field.getName()).charAt(0)); 
+                } else if (field.getType().equals(String.class)) {
+                    field.set(obj, info.get(field.getName()));
+                } else {
+                    parseString(field.get(obj), info.get(field.getName()));
+                }
+            } catch (Exception e) {
+                    e.printStackTrace();
+            }
+        }
+    }
+
+    public static void parseString(Object obj, String parsable)
+    {
+        DataReader dataReader = new DataReader(parsable);
+        HashMap<String, String> info = dataReader.scanMap();
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field:fields) {
+            field.setAccessible(true);
+            try {
+                if (field.getType().equals(int.class)) {
+                    field.set(obj, Integer.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(long.class)) {
+                    field.set(obj, Long.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(double.class)) {
+                    field.set(obj, Double.valueOf(info.get(field.getName()))); 
+                } else if (field.getType().equals(short.class)) {
+                    field.set(obj, Short.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(float.class)) {
+                    field.set(obj, Float.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(byte.class)) {
+                    field.set(obj, Byte.valueOf(info.get(field.getName()))); 
+                } else if (field.getType().equals(char.class)) {
+                    field.set(obj, info.get(field.getName()).charAt(0)); 
+                } else if (field.getType().equals(String.class)) {
+                    field.set(obj, info.get(field.getName()));
+                } else {
+                    parseString(field.get(obj), info.get(field.getName()));
+                }
+            } catch (Exception e) {
+                    e.printStackTrace();
+            }
+        }
+    }
+
+    public static String makeParsable(Object obj)
+    {
+        Field[] fields = obj.getClass().getDeclaredFields();
+        String parsable = "{\n";
+        for (Field field:fields) {
+            field.setAccessible(true);
+            parsable += "\t\"" + field.getName() + "\":\"";
+            try {
+                if (field.getType().equals(int.class) ||
+                    field.getType().equals(long.class) ||
+                    field.getType().equals(double.class) ||
+                    field.getType().equals(short.class) ||
+                    field.getType().equals(float.class) ||
+                    field.getType().equals(byte.class) || 
+                    field.getType().equals(char.class)) { /* char should be checked if it's ", fix later */
+                    parsable += field.get(obj).toString();
+                } else if (field.getType().equals(String.class)) {
+                    for (int i = 0; i < ((String) field.get(obj)).length(); i++) {
+                        char c = ((String) field.get(obj)).charAt(i);
+                        parsable += c != '\"' ? "" + c : "\\\"";
+                    }
+                } else {
+                    String subParsable = makeParsable(field.get(obj));
+                    for (int i = 0; i < subParsable.length(); i++) {
+                        char c = subParsable.charAt(i);
+                        parsable += c != '\"' ? "" + c : "\\\"";
+                    }
+                }
+            } catch (Exception e) {
+                    e.printStackTrace();
+            }
+            parsable += "\";\n";
+        }
+        return parsable + "}";
     }
 }
