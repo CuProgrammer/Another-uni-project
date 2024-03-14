@@ -1,5 +1,9 @@
 package com.blackbank.flyingdollar;
 
+import static com.blackbank.flyingdollar.ClientStatus.NORMAL;
+import static com.blackbank.flyingdollar.ClientType.ACCOUNT;
+import static com.blackbank.flyingdollar.Gender.MALE;
+
 class Cat {
     int age;
     String name;
@@ -46,11 +50,12 @@ class UltraCat {
 public class FlyingDollar {
 
     public static void main(String[] args) {
-        UltraCat ultraCat = new UltraCat(400, "Satella", 7);
-        UltraCat newUltraCat = new UltraCat();
-        String parsable = BankUtils.makeParsable(ultraCat);
-        BankUtils.parseString(newUltraCat, parsable);
+        Client account = new Client("user", "pass", "name", MALE, ACCOUNT, NORMAL);
+        System.out.println(account);
+        String parsable = BankUtils.makeParsable(account);
         System.out.println(parsable);
-        System.out.println(newUltraCat);
+        Client parsed = new Client();
+        BankUtils.parseString(parsed, parsable);
+        System.out.println(parsed);
     }
 }
