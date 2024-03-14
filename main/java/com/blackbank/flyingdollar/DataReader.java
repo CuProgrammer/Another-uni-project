@@ -49,6 +49,8 @@ public class DataReader {
                     System.err.println("Corrupted object with character " + c);
             }
         }
+        while (peek() == ' ' || peek() == '\t' || peek() == '\n' || peek() == '\r')
+            advance();
 
         return info;
     }
@@ -70,6 +72,11 @@ public class DataReader {
     private boolean isAtEnd()
     {
         return current >= source.length();
+    }
+
+    private char peek()
+    {
+        return isAtEnd() ? '\0' : source.charAt(current);
     }
     
     private char advance()
