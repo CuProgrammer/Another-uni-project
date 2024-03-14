@@ -1,26 +1,47 @@
 package com.blackbank.flyingdollar;
 
-import com.blackbank.flyingdollar.Gender.*;
 import java.util.Objects;
 
+import static com.blackbank.flyingdollar.Gender.*;
+import static com.blackbank.flyingdollar.ClientType.*;
+import static com.blackbank.flyingdollar.ClientStatus.*;
 public class Client {
-    private String username;
-    private String password;
-    private String name;
-    private Gender gender;
+    String username;
+    String password;
+    String name;
+    Gender gender;
+    ClientType type;
+    ClientStatus status;
     
-    public Client(String username, String password, String name, Gender gender)
+    public Client(String username, String password, String name, Gender gender, ClientType type, ClientStatus status)
     {
         this.username = username;
         this.password = BankUtils.hashString(password);
         this.name = name;
         this.gender = gender;
+        this.type = type;
+        this.status = status;
+    }
+
+    public Client()
+    {
+        username = "";
+        password = "";
+        name = "";
+        gender = MALE;
+        type = ACCOUNT;
+        status = NORMAL;
+    }
+
+    public boolean isDeleted()
+    {
+        return status == DELETE;
     }
 
     @Override
     public String toString()
     {
-        return BankUtils.combine(username, password, name, gender);
+        return BankUtils.combine(username, password, name, gender, type, status);
     }
     
     @Override
