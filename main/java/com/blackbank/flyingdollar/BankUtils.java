@@ -88,6 +88,12 @@ public class BankUtils {
                     field.set(obj, info.get(field.getName()).charAt(0)); 
                 } else if (field.getType().equals(String.class)) {
                     field.set(obj, info.get(field.getName()));
+                } else if (field.getType().equals(Gender.class)) {
+                    field.set(obj, Gender.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(ClientType.class)) {
+                    field.set(obj, ClientType.valueOf(info.get(field.getName())));
+                } else if (field.getType().equals(ClientStatus.class)) {
+                    field.set(obj, ClientStatus.valueOf(info.get(field.getName())));
                 } else {
                     parseString(field.get(obj), info.get(field.getName()));
                 }
@@ -105,13 +111,7 @@ public class BankUtils {
             field.setAccessible(true);
             parsable += "\t\"" + field.getName() + "\":\"";
             try {
-                if (field.getType().equals(int.class) ||
-                    field.getType().equals(long.class) ||
-                    field.getType().equals(double.class) ||
-                    field.getType().equals(short.class) ||
-                    field.getType().equals(float.class) ||
-                    field.getType().equals(byte.class) || 
-                    field.getType().equals(char.class)) { /* char should be checked if it's ", fix later */
+                if (field.getType().isPrimitive() || field.getType().isEnum()) { /* char should be checked if it's ", fix later */
                     parsable += field.get(obj).toString();
                 } else if (field.getType().equals(String.class)) {
                     for (int i = 0; i < ((String) field.get(obj)).length(); i++) {
