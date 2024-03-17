@@ -55,6 +55,9 @@ public class BankUtils {
                     field.set(obj, info.get(field.getName()).charAt(0)); 
                 } else if (field.getType().equals(String.class)) {
                     field.set(obj, info.get(field.getName()));
+                } else if (field.getType().isEnum()) {
+                    Class<? extends Enum> enumType = (Class<? extends Enum>) field.getType();
+                    field.set(obj, Enum.valueOf(enumType, info.get(field.getName())));
                 } else {
                     parseString(field.get(obj), info.get(field.getName()));
                 }
@@ -88,12 +91,9 @@ public class BankUtils {
                     field.set(obj, info.get(field.getName()).charAt(0)); 
                 } else if (field.getType().equals(String.class)) {
                     field.set(obj, info.get(field.getName()));
-                } else if (field.getType().equals(Gender.class)) {
-                    field.set(obj, Gender.valueOf(info.get(field.getName())));
-                } else if (field.getType().equals(ClientType.class)) {
-                    field.set(obj, ClientType.valueOf(info.get(field.getName())));
-                } else if (field.getType().equals(ClientStatus.class)) {
-                    field.set(obj, ClientStatus.valueOf(info.get(field.getName())));
+                } else if (field.getType().isEnum()) {
+                    Class<? extends Enum> enumType = (Class<? extends Enum>) field.getType();
+                    field.set(obj, Enum.valueOf(enumType, info.get(field.getName())));
                 } else {
                     parseString(field.get(obj), info.get(field.getName()));
                 }
