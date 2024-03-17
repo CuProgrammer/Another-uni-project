@@ -10,6 +10,7 @@ public class Client {
     String password;
     String name;
     Gender gender;
+    double balance;
     ClientType type;
     ClientStatus status;
     
@@ -41,7 +42,7 @@ public class Client {
     @Override
     public String toString()
     {
-        return BankUtils.combine(username, password, name, gender, type, status);
+        return BankUtils.combine(username, password, name, gender, balance, type, status);
     }
     
     @Override
@@ -49,7 +50,7 @@ public class Client {
     {
         if (this == comparedObject)
             return true;
-        if (!(comparedObject instanceof Client))
+        if (!(comparedObject instanceof Client) || comparedObject == null)
             return false;
         Client comparedClient = (Client) comparedObject;
         return comparedClient.username.equals(username);
