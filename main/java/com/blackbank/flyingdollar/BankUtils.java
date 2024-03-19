@@ -14,6 +14,14 @@ public class BankUtils {
         return combination;
     }
     
+    public static String combine(String divisor, Object... objs)
+    {
+        String combination = "";
+        for (int i = 0; i < objs.length; i++)
+            combination += objs[i] + (i < objs.length - 1 ? divisor : "");
+        return combination;
+    }
+    
     public static String hashString(String input)
     {
         try {
